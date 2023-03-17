@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Backoffice</title>
+    <link rel="stylesheet" href="css/backoffice.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container" id="main">
+      <h2>Inserisci il tuo prodotto</h2>
+      <form onsubmit="handleSubmit(event)">
+        <div class="params"><span>Nome:</span><input id="name" type="text" placeholder="Nome prodotto" required /></div>
+        <div class="params">
+          <span>Descrizione:</span><input id="description" type="text" placeholder="Descrizione prodotto" required />
+        </div>
+        <div class="params">
+          <span>Brand:</span><input id="brand" type="text" placeholder="Brand prodotto" required />
+        </div>
+        <div class="params">
+          <span>Immagine:</span><input id="img" type="text" placeholder="URL immagine" required />
+        </div>
+        <div class="params">
+          <span>Downsize</span><input id="downsize" type="text" placeholder="Downsize" required />
+        </div>
+        <div class="params">
+          <span>Prezzo</span><input id="price" type="text" placeholder="Prezzo prodotto" required />
+        </div>
+        <div class="buttons">
+          <button type="submit" class="button-ins">INSERISCI</button>
+          <a href="index.html"><button class="home-button" type="button">HOME</button></a>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      const endpoint = "https://striveschool-api.herokuapp.com/api/product";
+
+      const handleSubmit = async (event) => {
+        event.preventDefault();
+        const newApp = {
+          name: document.getElementById("name").value,
+          description: document.getElementById("description").value,
+          brand: document.getElementById("brand").value,
+          imageUrl: document.getElementById("img").value,
+          downsize: document.getElementById("downsize").value,
+          price: document.getElementById("price").value
+        };
+        console.log("submit", newApp);
+        try {
+          const resp = await fetch(endpoint, {
+            method: "POST",
+            body: JSON.stringify(newApp),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDE0NjM4ZGY4MWI0MjAwMTM5YjJhNjUiLCJpYXQiOjE2NzkwNTc4MDUsImV4cCI6MTY4MDI2NzQwNX0.-qxMtrbOjFivi6d3DmNSECglIBHgxVW5AraajEm3j34"
+            }
+          });
+          var conferma = document.createElement("div");
+          const obj = await resp.json();
+          var main = document.getElementById("main");
+          conferma.setAttribute("class", "confirm");
+          conferma.innerHTML = "Prodotto inserito correttamente con id " + obj._id;
+          main.appendChild(conferma);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
